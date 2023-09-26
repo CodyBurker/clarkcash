@@ -1,33 +1,48 @@
 {% extends 'base.html' %}
-{% block title %}
-Home
-{% endblock%}
+{% block title %}Home{% endblock %}
 
 {% block content %}
-{% if schools_list%}
-{% for school in schools_list%}
-    <div class="jumbotron">
-        <h1>{{school.name}}</h1>
-        {%for teacher in school.teachers.all%}
-            <h3>{{teacher.name}} - <i>{{teacher.grade}}</i></h3>
-            <table class="table">
-                <thead class="table">
-                    <tr>
-                        <th>Name</th>
-                        <th>Points</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {%for student in teacher.student_set.all%}
-                    <tr>
-                        <td>{{student.name}}</td>
-                        <td>{{student.check_points}}</td>
-                    </tr>
-                    {%endfor%}
-                </table>
-        {%endfor%}
-    </div>
-{%endfor%}
-{%endif%}
+    {% if schools_list %}
+        {% for school in schools_list %}
+            <div class="jumbotron">
+                <h1>{{ school.name }}</h1>
+                <div class="accordion" id="accordion{{ school.id }}">
+                    {% for teacher in school.teachers.all %}
+                        <div class="card">
+                            <div class="card-header" id="heading{{ teacher.id }}">
+                                <h2 class="mb-0">
+                                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse{{ teacher.id }}" aria-expanded="true" aria-controls="collapse{{ teacher.id }}">
+                                        {{ teacher.name }} - <i>{{ teacher.grade }}</i>
+                                    </button>
+                                </h2>
+                            </div>
+                            
+                            <div id="collapse{{ teacher.id }}" class="collapse" aria-labelledby="heading{{ teacher.id }}" data-parent="#accordion{{ school.id }}">
+                                <div class="card-body">
+                                    <table class="table">
+                                        <thead class="table">
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Points</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for student in teacher.student_set.all %}
+                                                <tr>
+                                                    <td>{{ student.name }}</td>
+                                                    <td>{{ student.check_points }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No schools available.</p>
+    {% endif %}
 {% endblock %}
-```
