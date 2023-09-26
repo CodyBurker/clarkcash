@@ -1,0 +1,11 @@
+{% if schools_list%}
+    <b>Schools</b>
+    <ul>
+    {% for school in schools_list %}
+        <li><a href="{% url 'pointstracking:school' school.id %}">{{ school.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No schools are available.</p>
+{% endif %}
+```
