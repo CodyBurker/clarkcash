@@ -1,11 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}
+Home
+{% endblock%}
+
+{% block content %}
 {% if schools_list%}
-    <b>Schools</b>
-    <ul>
-    {% for school in schools_list %}
-        <li><a href="{% url 'pointstracking:school' school.id %}">{{ school.name }}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No schools are available.</p>
-{% endif %}
+{% for school in schools_list%}
+    <div class="jumbotron">
+        <h1>{{school.name}}</h1>
+        {%for teacher in school.teachers.all%}
+            <h3>{{teacher.name}} - <i>{{teacher.grade}}</i></h3>
+            <table class="table">
+                <thead class="table">
+                    <tr>
+                        <th>Name</th>
+                        <th>Points</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {%for student in teacher.student_set.all%}
+                    <tr>
+                        <td>{{student.name}}</td>
+                        <td>{{student.check_points}}</td>
+                    </tr>
+                    {%endfor%}
+                </table>
+        {%endfor%}
+    </div>
+{%endfor%}
+{%endif%}
+{% endblock %}
 ```

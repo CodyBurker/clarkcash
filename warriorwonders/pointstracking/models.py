@@ -8,6 +8,7 @@ class School(models.Model):
 
 class Grade(models.Model):
     name = models.CharField(max_length=50)
+    sort_order = models.IntegerField(default=0)
     def __str__(self):
         return self.name
 
@@ -15,7 +16,7 @@ class Teacher(models.Model):
     name = models.CharField(max_length=50)
     email = models.CharField(max_length=50)
     grade = models.ForeignKey(Grade, on_delete=models.CASCADE)
-    school = models.ForeignKey(School, on_delete=models.CASCADE)
+    school = models.ForeignKey(School, on_delete=models.CASCADE, related_name='teachers')
     def __str__(self):
         return f'{self.name} - {self.grade} @ {self.school}'
 

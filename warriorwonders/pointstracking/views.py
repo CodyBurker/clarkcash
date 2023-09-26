@@ -1,10 +1,13 @@
 from django.shortcuts import render
 from django.http import HttpResponse, Http404
 from .models import Student, Teacher, School
+from django.db.models import Prefetch
 
 
 def index(request):
-    schools = School.objects.all()
+    schools = School.objects.all().prefetch_related( 
+                                                    Prefetch('teachers',queryset=Teacher.objects.order_by('grade__sort_order'))
+                                                    )
     context = {'schools_list': schools}
     return render(request, 'pointstracking/index.html', context)
 
