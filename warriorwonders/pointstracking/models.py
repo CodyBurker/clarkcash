@@ -56,6 +56,15 @@ class Student(models.Model):
                 )
             point.save()
             return True
+    def add_points(self, vaue: int):
+        point = Point(
+            student=self, 
+            value=vaue, 
+            date=timezone.now(),
+            description="Added points"
+            )
+        point.save()
+        return True
 
 class Point(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)

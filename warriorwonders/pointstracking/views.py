@@ -1,9 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, Http404
 from .models import Student, Teacher, School
 from django.db.models import Prefetch
-from django.views.generic import DetailView, ListView
-
+from django.views.generic import DetailView, ListView, FormView
+from .forms import UpdatePointsForm
 
 class IndexView(ListView):
     model = School
@@ -19,3 +19,18 @@ class TeacherView(DetailView):
     model = Teacher
     template_name = 'pointstracking/teacher.html'
     context_object_name = 'teacher'
+
+def update_student_points(request, student_id):
+    student = get_object_or_404(Student, id=student_id)
+    
+    if request.method == 'POST':
+        form = UpdatePointsForm(request.POST)
+        if form.is_valid():
+            points = form.cleaned_data['points']
+            student.add_points(points)
+            return redirect('pointstracking:index')
+    else:
+        form = UpdatePointsForm()
+
+    context = {'form': form, 'student': student}
+    return render(request, 'pointstracking/update_points.html', context)
