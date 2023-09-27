@@ -6,8 +6,8 @@
         <div class="col-md-6 offset-md-3">
             <div class="card">
                 <div class="card-header">
-                    <h3>Add Points for {{student.name}}</h3>
-                    <p>Current Points: {{student.check_points}}</p>
+                    <h3>Update Points for {{student.name}}</h3>
+                    <h5>Current Points: {{student.check_points}}</h5>
                 </div>
                 <div class="card-body">
                     <form method="post">
@@ -18,7 +18,7 @@
                                 <input type="{{ field.field.widget.input_type }}" class="form-control" id="{{ field.id_for_label }}" name="{{ field.name }}" value="{{ field.value|default:'' }}">
                             </div>
                         {% endfor %}
-                        <button type="submit" class="btn btn-primary">Update Points</button>
+                        <button type="submit" class="btn btn-warning">Spend Points</button>
                     </form>
                 </div>
             </div>

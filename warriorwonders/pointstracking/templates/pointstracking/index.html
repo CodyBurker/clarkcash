@@ -34,7 +34,7 @@
                                                     <td>{{ student.check_points }}</td>
                                                     <td>
                                                         <a href="{%url 'pointstracking:update_points' student_id=student.id %}" class="btn btn-primary">Add Points</a>
-                                                        <a href="{%url 'pointstracking:spend_points' student_id=student.id %}" class="btn btn-danger">Spend Points</a>
+                                                        <a href="{%url 'pointstracking:spend_points' student_id=student.id %}" class="btn btn-danger">Redeem Points</a>
                                                     </td>
                                                 </tr>
                                             {% endfor %}
