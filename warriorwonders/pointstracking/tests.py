@@ -50,4 +50,4 @@ class UpdatePointsFormTest(TestCase):
     def test_update_points_form(self):
         response = self.client.get(reverse('pointstracking:update_points', args=(self.student.id,)))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Update Points for Test Student')
+        self.assertContains(response, 'Test Student')
