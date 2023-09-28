@@ -7,6 +7,9 @@ from django.views.generic import DetailView, ListView, FormView
 from .forms import UpdatePointsForm
 from django.contrib import messages
 from django.views.generic.base import ContextMixin
+from rest_framework.views import APIView
+from rest_framework.response import Response
+import polars as pl
 
 class IndexView(ListView):
     model = School
@@ -128,3 +131,30 @@ class StudentView(DetailView):
     model = Student
     template_name = 'pointstracking/student.html'
     context_object_name = 'student'
+
+# Get data for chart.js
+# Of student points over time
+class StudentChartData(APIView):
+    def get(self, request, format=None, **kwargs):
+        student_id = self.kwargs.get('pk')
+        student = get_object_or_404(Student, id=student_id)
+        points = student.point_set.all()
+        labels = []
+        data = []
+        # Use polars to group points by month and sum
+        df = pl.DataFrame(
+            {'date': [point.date for point in points],
+             'value': [point.value for point in points]}
+        ).with_columns(date = pl.col('date').cast(pl.Date),
+                       value = pl.col('value').cast(pl.Int64)
+        ).with_columns(month = pl.col('date').dt.month()
+        ).groupby('month').agg(pl.sum('value').alias('value'))
+        labels = df['month'].to_list()
+        data = df['value'].to_list()
+        # for point in points:
+        #     labels.append(point.date.strftime('%m/%d/%Y'))
+        #     data.append(point.value)
+        return Response(data={
+            'labels': labels,
+            'chartData': data,
+        })

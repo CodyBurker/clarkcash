@@ -11,4 +11,5 @@ urlpatterns = [
     path('spend_points/<int:student_id>/', views.SpendPointsView.as_view(), name='spend_points'),
     path('schools/<int:pk>/', views.SchoolView.as_view(), name='schools'),
     path('students/<int:pk>/', views.StudentView.as_view(), name='students'),
+    path('students_chart/<int:pk>/', views.StudentChartData.as_view(), name='students_chart'),
 ]
