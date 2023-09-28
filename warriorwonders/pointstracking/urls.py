@@ -10,4 +10,5 @@ urlpatterns = [
     path('update_points/<int:student_id>/', views.UpdateStudentPointsView.as_view(), name='update_points'),
     path('spend_points/<int:student_id>/', views.SpendPointsView.as_view(), name='spend_points'),
     path('schools/<int:pk>/', views.SchoolView.as_view(), name='schools'),
+    path('students/<int:pk>/', views.StudentView.as_view(), name='students'),
 ]

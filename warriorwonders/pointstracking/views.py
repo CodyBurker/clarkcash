@@ -123,3 +123,8 @@ class SchoolView(DetailView):
         sorted_grades = Grade.objects.order_by('sort_order').all()
         context['grades'] = sorted_grades
         return context
+
+class StudentView(DetailView):
+    model = Student
+    template_name = 'pointstracking/student.html'
+    context_object_name = 'student'
