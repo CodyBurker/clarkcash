@@ -11,6 +11,9 @@ class Grade(models.Model):
     sort_order = models.IntegerField(default=0)
     def __str__(self):
         return self.name
+    
+    def is_empty(self):
+        return self.teacher_set.count() == 0
 
 class Teacher(models.Model):
     name = models.CharField(max_length=50)
@@ -19,13 +22,14 @@ class Teacher(models.Model):
     school = models.ForeignKey(School, on_delete=models.CASCADE, related_name='teachers')
     def __str__(self):
         return f'{self.name} - {self.grade} @ {self.school}'
+    def get_students(self):
+        return Student.objects.filter(teacher=self)
 
 class Student(models.Model):
     name = models.CharField(max_length=50)
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
 
     def __str__(self):
-        grade = self.teacher.grade
         return f'{self.name} - {self.teacher}'
 
     def check_points(self):

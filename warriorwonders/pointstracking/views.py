@@ -1,7 +1,7 @@
 from typing import Any
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpRequest, HttpResponse, Http404
-from .models import Student, Teacher, School
+from .models import Student, Teacher, School, Grade
 from django.db.models import Prefetch
 from django.views.generic import DetailView, ListView, FormView
 from .forms import UpdatePointsForm
@@ -38,7 +38,7 @@ class SpendPointsView(FormView):
             points = form.cleaned_data['points']
             student.redeem_points(points)
             messages.success(request, f'Successfully redeemed {points} points for {student.name}')
-            return redirect('pointstracking:index')
+            return redirect('pointstracking:school', pk = student.teacher.school.id)
     def get(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
         student_id = kwargs.get('student_id')
         student = get_object_or_404(Student, id=student_id)
@@ -63,7 +63,7 @@ class UpdateStudentPointsView(FormView):
             points = form.cleaned_data['points']
             student.add_points(points)
             messages.success(request, f'Successfully added {points} points for {student.name}')
-            return redirect('pointstracking:index')
+            return redirect('pointstracking:school', pk = student.teacher.school.id)
     def get(self, request, *args, **kwargs):
         student_id = kwargs.get('student_id')
         student = get_object_or_404(Student, id=student_id)
@@ -81,10 +81,24 @@ class SpendStudentPointsView(FormView):
         if form.is_valid():
             points = form.cleaned_data['points']
             student.redeem_points(points)
-            return redirect('pointstracking:index')
+            return redirect('pointstracking:school')
     def get(self, request, *args, **kwargs):
         student_id = kwargs.get('student_id')
         student = get_object_or_404(Student, id=student_id)
         form = UpdatePointsForm()
         context = {'form': form, 'student': student}
         return render(request, self.template_name, context)
+
+class SchoolView(DetailView):
+    model = School
+    template_name = 'pointstracking/school.html'
+    context_object_name = 'school'
+    # Add extra context to the view
+    # Add list of grades in addition to school object
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        school_id = self.kwargs.get('pk')
+        school = get_object_or_404(School, id=school_id)
+        context['school'] = school
+        context['grades'] = Grade.objects.all()
+        return context
