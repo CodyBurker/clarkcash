@@ -11,10 +11,12 @@ def setup_helper(calling_object):
     grade = Grade.objects.create(name='Test Grade', sort_order=1)
     teacher = Teacher.objects.create(name='Test Teacher', school=school, grade=grade)
     student = Student.objects.create(name='Test Student', teacher=teacher)
+    student2 = Student.objects.create(name='Test Student 2', teacher=teacher)
     calling_object.school = school
     calling_object.grade = grade
     calling_object.teacher = teacher
     calling_object.student = student
+    calling_object.student2 = student2
 
 class StudentModelTests(TestCase):
     def setUp(self):
@@ -51,3 +53,17 @@ class UpdatePointsFormTest(TestCase):
         response = self.client.get(reverse('pointstracking:update_points', args=(self.student.id,)))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Test Student')
+
+class SchoolViewTest(TestCase):
+    def setUp(self):
+        setup_helper(self)
+
+    def test_school_view(self):
+        url = reverse('pointstracking:schools', args=(self.school.id,))
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Test School')
+        self.assertContains(response, 'Test Teacher')
+        self.assertContains(response, 'Test Student')
+        self.assertContains(response, 'Test Student 2')
+        self.assertTemplateUsed(response, 'pointstracking/school.html')
