@@ -9,48 +9,52 @@
 
 <!-- Loop over each grade -->
 {% for grade in grades %}
-    <!-- Check if grade has any teachers -->
-    {% if grade.is_empty %}
-        <h2>{{grade.name}} (<i>No Teachers</i>)</h2>
-    {% else %}
-        <h2>{{grade.name}}</h2>
-        <!-- Loop over each teacher in the grade -->
-        {% for teacher in school.teachers.all %}
-            {% if teacher.grade.name == grade.name %}
-            <div class="card">
-                <div class="card-header">
-                    <h3>{{teacher.name}}</h3>
-                    <!-- <p>Students: {{teacher.get_students}}</p> -->
-                </div>
-                <div class="card-body">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Student</th>
-                                <th>Points</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Loop over each student in the teacher's class -->
-                            {% for student in teacher.get_students %}
-                                <tr>
-                                    <td>{{student.name}}</td>
-                                    <td>{{student.check_points}}</td>
-                                    <td>
-                                        <a href="{%url 'pointstracking:update_points' student_id=student.id %}" class="btn btn-primary">Add Points</a>
-                                        <a href="{%url 'pointstracking:spend_points' student_id=student.id %}" class="btn btn-danger">Redeem Points</a>
-                                    </td>
-                                </tr>
-                            {% endfor %}
+<!-- Check if grade has any teachers -->
+{% if grade.is_empty %}
+<h2>{{grade.name}} (<i>No Teachers</i>)</h2>
+{% else %}
+<h2>{{grade.name}}</h2>
+<!-- Loop over each teacher in the grade -->
+{% for teacher in school.teachers.all %}
+{% if teacher.grade.name == grade.name %}
+<div class="card">
+    <div class="card-header">
+        <h3>{{teacher.name}}</h3>
+        <!-- <p>Students: {{teacher.get_students}}</p> -->
+    </div>
+    <div class="card-body">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Student</th>
+                    <th>Points</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Loop over each student in the teacher's class -->
+                {% for student in teacher.get_students %}
+                <tr>
+                    <td>{{student.name}}</td>
+                    <td>{{student.check_points}}</td>
+                    <td>
+                        <a href="{%url 'pointstracking:update_points' student_id=student.id %}"
+                            class="btn btn-primary">Give Cash</a>
+                        <a href="{%url 'pointstracking:spend_points' student_id=student.id %}"
+                            class="btn btn-danger">Spend Cash</a>
+                    </td>
+                </tr>
+                {% endfor %}
 
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            {% endif %}
-        {% endfor %}
-    {% endif %}
+            </tbody>
+        </table>
+    </div>
+    <br>
+</div>
+{% endif %}
+{% endfor %}
+<br>
+{% endif %}
 {% endfor %}
 
 {%endblock%}

@@ -7,6 +7,11 @@
               <li class="nav-item active">
                 <a class="nav-link" href="{% url 'pointstracking:index' %}">Home <span class="sr-only">(current)</span></a>
               </li>
+            {% for school in schools %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'pointstracking:schools' pk=school.id %}">{{school.name}}</a>
+                </li>
+            {% endfor %}
             </ul>
           </div>
     </nav>

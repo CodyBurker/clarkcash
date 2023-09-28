@@ -38,7 +38,7 @@ class SpendPointsView(FormView):
             points = form.cleaned_data['points']
             student.redeem_points(points)
             messages.success(request, f'Successfully redeemed {points} points for {student.name}')
-            return redirect('pointstracking:school', pk = student.teacher.school.id)
+            return redirect('pointstracking:schools', pk = student.teacher.school.id)
     def get(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
         student_id = kwargs.get('student_id')
         student = get_object_or_404(Student, id=student_id)
@@ -63,7 +63,7 @@ class UpdateStudentPointsView(FormView):
             points = form.cleaned_data['points']
             student.add_points(points)
             messages.success(request, f'Successfully added {points} points for {student.name}')
-            return redirect('pointstracking:school', pk = student.teacher.school.id)
+            return redirect('pointstracking:schools', pk = student.teacher.school.id)
     def get(self, request, *args, **kwargs):
         student_id = kwargs.get('student_id')
         student = get_object_or_404(Student, id=student_id)

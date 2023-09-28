@@ -6,7 +6,7 @@
         <div class="col-md-6 offset-md-3">
             <div class="card">
                 <div class="card-header">
-                    <h3>Update Points for {{student.name}}</h3>
+                    <h3>Spend Cash for {{student.name}}</h3>
                     <h5>Current Points: {{student.check_points}}</h5>
                 </div>
                 <div class="card-body">
@@ -18,7 +18,8 @@
                                 <input type="{{ field.field.widget.input_type }}" class="form-control" id="{{ field.id_for_label }}" name="{{ field.name }}" value="{{ field.value|default:'' }}">
                             </div>
                         {% endfor %}
-                        <button type="submit" class="btn btn-warning">Spend Points</button>
+                        <button type="submit" class="btn btn-warning">Spend Cash</button>
+                        <button type="button" class="btn btn-secondary" onclick="window.history.back()">Cancel</button>
                     </form>
                 </div>
             </div>
