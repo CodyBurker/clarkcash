@@ -20,8 +20,18 @@
                         {% endfor %}
                         <button type="submit" class="btn btn-warning">Spend Cash</button>
                         <button type="button" class="btn btn-secondary" onclick="window.history.back()">Cancel</button>
+                        <!-- Add a hline to separate the quick spend buttons from the form -->
+                        <hr>
+                        <h5>Quick Spend:</h5>
+                        <div class="text-center">
+                            {% for quick_spend_point in quick_spend_points %}
+                                <button type="button" class="btn btn-large btn-primary mx-2" onclick="document.getElementById('id_points').value='{{ quick_spend_point.points }}'; this.form.submit();"> ({{ quick_spend_point.get_points }} Clark Bucks)</button>
+                            {% endfor %}
+                        </div>
+                    </form>
                     </form>
                 </div>
+                
             </div>
         </div>
     </div>

@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 # Create your tests here.
-from .models import Student, Teacher, School, Grade
+from .models import Student, Teacher, School, Grade, QuickSpendPoint
 
 # Helper function to setup
 
@@ -67,3 +67,16 @@ class SchoolViewTest(TestCase):
         self.assertContains(response, 'Test Student')
         self.assertContains(response, 'Test Student 2')
         self.assertTemplateUsed(response, 'pointstracking/school.html')
+
+class QuickSpendTest(TestCase):
+    def setUp(self) -> None:
+        setup_helper(self)
+        # Add set up for quick spend points
+        self.quick_spend = QuickSpendPoint.objects.create(points = 5)
+    # Check on spend_points.html to see if quick spend points are displayed
+    def test_spend_points_view(self):
+        url = reverse('pointstracking:spend_points', args=(self.student.id,))
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, '5 Clark Bucks')
+        self.assertTemplateUsed(response, 'pointstracking/spend_points.html')

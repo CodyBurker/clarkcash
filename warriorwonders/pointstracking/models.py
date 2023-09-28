@@ -39,14 +39,15 @@ class Student(models.Model):
             total += point.value
         return total
     
-    def redeem_points(self, value):
+    def redeem_points(self, value, user='admin'):
         available_points = self.check_points()
         if value <= available_points:
             # Create point object with negative value of points to redeem
             point = Point(student=self, 
                           value=-value, 
                           date=timezone.now(),
-                          description="Redeemed points"
+                          description="Redeemed points",
+                          user = user
                           )
             point.save()
             return True
@@ -60,12 +61,13 @@ class Student(models.Model):
                 )
             point.save()
             return True
-    def add_points(self, vaue: int):
+    def add_points(self, vaue: int, user="admin"):
         point = Point(
             student=self, 
             value=vaue, 
             date=timezone.now(),
-            description="Added points"
+            description="Added points",
+            user = user
             )
         point.save()
         return True
@@ -75,6 +77,15 @@ class Point(models.Model):
     date = models.DateTimeField('date')
     value = models.IntegerField()
     description = models.CharField(max_length=200)
+    user = models.CharField(max_length=50, default='admin')
 
     def __str__(self) -> str:
         return f'{self.student} - ({self.value}) - {self.date} - {self.description}'
+
+class QuickSpendPoint(models.Model):
+    # Class to provide user with options to quickly let students spend points
+    points = models.IntegerField()
+    def get_points(self):
+        return str(self.points)
+    def __str__(self) -> str:
+        return str(self.points)
